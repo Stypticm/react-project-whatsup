@@ -1,0 +1,17 @@
+.main_container {
+    background-color: #f0f2f5;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+}
+
+.left_column {
+    background-color: #667781;
+    width: 32%;
+}
+
+.right_column {
+    background-color: #00a884;
+    width: 68%;
+}

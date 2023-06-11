@@ -9,8 +9,12 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 // Styles
 import styles from './Search.module.scss';
+
+// Context
 import { AppContext } from '../../../context/WindowPageContext';
-import { Types } from '../../../context/reducers';
+
+// Types
+import { Types } from '../../../context/types';
 
 export const Search: React.FC = () => {
   const { state, dispatch } = React.useContext(AppContext);
@@ -28,7 +32,7 @@ export const Search: React.FC = () => {
   }
 
   const createChat = () => {
-    dispatch({ type: Types.BLUR })
+    dispatch({ type: Types.DIALOG_CREATE_CHAT })
   }
 
   return (

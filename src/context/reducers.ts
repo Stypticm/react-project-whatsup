@@ -1,56 +1,9 @@
-// State 
-type StateType = {
-    isOpen: boolean;
-    isBlur: boolean;
-    isOpenDialog: boolean;
-    chatId: null | string;
-    chatIsOpen: boolean;
-}
 
-enum MessageType {
-    incoming = 0,
-    outgoing = 1
-}
-
-export type Message = {
-    id: string;
-    message: string;
-    type?: MessageType;
-}
-
-export type ChatType = {
-    id: string;
-    contactName: string;
-    avatar: string;
-    lastMessage: string;
-    timestamp: Date;
-    messages: {
-        message: Message;
-    }
-}
-
-export const initialState: StateType = {
-    isOpen: false,
-    isBlur: false,
-    isOpenDialog: false,
-    chatId: null,
-    chatIsOpen: false
-}
-
-// Action
-export enum Types {
-    OPEN_CLOSE = 'OPEN_CLOSE',
-    OPEN_CLOSE_DIALOG = 'OPEN_CLOSE_DIALOG',
-    BLUR = 'BLUR',
-    OFF_BLUR = 'OFF_BLUR',
-    ADD_CHAT = 'ADD_CHAT',
-    CHAT_ID = 'CHAT_ID',
-    CHAT_IS_OPEN = 'CHAT_IS_OPEN'
-}
+import { Types, StateType, initialState,  } from './types';
 
 type ReducerAction = {
     type: Types;
-    payload?: string | ChatType;
+    payload?: number | string | boolean ;
 }
 
 export const reducer = (state: StateType, action: ReducerAction): typeof initialState => {
@@ -64,9 +17,13 @@ export const reducer = (state: StateType, action: ReducerAction): typeof initial
             return {
                 ...state, isOpenDialog: !state.isOpenDialog
             }
-        case Types.BLUR:
+        case Types.DIALOG_QUIT:
             return {
-                ...state, isBlur: !state.isBlur
+                ...state, isDialogQuit: !state.isDialogQuit
+            }
+        case Types.DIALOG_CREATE_CHAT:
+            return {
+                ...state, isDialogCreateChat: !state.isDialogCreateChat
             }
         case Types.OFF_BLUR:
             return {
@@ -79,6 +36,16 @@ export const reducer = (state: StateType, action: ReducerAction): typeof initial
         case Types.CHAT_IS_OPEN:
             return {
                 ...state, chatIsOpen: true
+            }
+        case Types.SET_AUTH:
+            return {
+                ...state,
+                isRegistered: !state.isRegistered
+            }
+        case Types.LOGIN_IN:
+            return {
+                ...state,
+                isLoginIn: !state.isLoginIn
             }
         default: throw new Error('Unexpected action');
     }

@@ -7,31 +7,33 @@ import { Box, Card, CardContent, Typography } from '@mui/material';
 import styles from './MainContent.module.scss'
 
 //Context
-import { AppContext, } from '../../../context/WindowPageContext';
-import { ChatType } from '../../../context/reducers';
+import { AppContext } from '../../../context/WindowPageContext';
+import { ChatType } from '../../../context/types';
 
 export const MainContent: React.FC = () => {
 
   const { state } = React.useContext(AppContext)
 
-  let data = localStorage.getItem('chats')
+  const [messages, setMessages] = React.useState<ChatType[]>([])
 
-  const [messages, setMessages] = React.useState<ChatType[]>(data ? JSON.parse(data) : [])
+  React.useEffect(() => {
+    
+  }, [state.chatId])
 
   return (
     <div className={styles.main_content}>
       {
         messages.map((item: ChatType) =>
-          item.id === state.chatId ?
-            <div key={item.id}>
+          item.chatId === `${state.chatId}@c.us` ?
+            <div key={item.chatId}>
               {
-                item.messages.message.type === 1 ?
-                  <div className={styles.blockMyMessage} key={item.id}>
+                item.type === 'outgoing' ?
+                  <div className={styles.blockMyMessage} key={item.idMessage}>
                     <Box display='inline-block'>
                       <Card className={styles.myMessageCard}>
                         <CardContent>
                           <Typography variant="body2">
-                            {item.messages.message.message}
+                            {item.textMessage}
                             <br />
                           </Typography>
                           <Typography sx={{ mb: 1.5 }} color="text.secondary">
@@ -41,12 +43,12 @@ export const MainContent: React.FC = () => {
                     </Box>
                   </div>
                   :
-                  <div className={styles.blockFriendsMessage} key={item.messages.message.id}>
+                  <div className={styles.blockFriendsMessage} key={item.idMessage}>
                     <Box display='inline-block'>
                       <Card>
                         <CardContent>
                           <Typography variant="body2">
-                            {item.messages.message.message}
+                            {item.textMessage}
                             <br />
                           </Typography>
                           <Typography sx={{ mb: 1.5 }} color="text.secondary">

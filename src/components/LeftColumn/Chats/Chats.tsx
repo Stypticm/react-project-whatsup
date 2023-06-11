@@ -3,20 +3,35 @@ import axios from 'axios'
 
 //Material UI
 import { Box, Card, CardContent, Divider, Typography } from '@mui/material';
+import { AccountCircle } from '@mui/icons-material';
 
 //Styles
 import styles from './Chats.module.scss';
-import { AccountCircle } from '@mui/icons-material';
-import { AppContext, ChatType } from '../../../context/WindowPageContext';
-import { Types } from '../../../context/reducers';
 
-export const Chats: React.FC = () => {
+// Context
+import { AppContext } from '../../../context/WindowPageContext';
 
-    let data = localStorage.getItem('chats')
+// Types
+import { Types } from '../../../context/types';
+
+// Components
+import { Search } from '../Search';
+
+// Helpers
+import { getContacts } from '../../../helpers/getContacts';
+
+interface ContactsProps {
+    id: string;
+    attributes: {
+        name: string;
+        phone: string;
+    }
+}
+
+export const Chats = () => {
 
     const { state, dispatch } = React.useContext(AppContext)
-    const [chats, setChats] = React.useState<ChatType[]>(data ? JSON.parse(data) : [])
-
+    
     const handleClickGetChat = (id: string) => {
         dispatch({ type: Types.CHAT_ID, payload: id })
         dispatch({ type: Types.CHAT_IS_OPEN })
@@ -24,29 +39,30 @@ export const Chats: React.FC = () => {
 
     return (
         <div className={styles.chats_container}>
+            <Search />
             <div className={styles.chats_group}>
                 <>
                     <Divider />
-                    {
-                        chats.map((item: ChatType) => (
+                    {/* {
+                        chats.map((item: ContactsProps) => (
                             <Box key={item.id} sx={{ cursor: 'pointer' }} onClick={() => handleClickGetChat(item.id)}>
                                 <Card>
                                     <CardContent className={styles.chatContent}>
                                         <AccountCircle color='secondary' fontSize='large' />
                                         <div className={styles.nicknameMessage}>
                                             <Typography variant="body1">
-                                                {item.contactName}
+                                                {item.attributes.name}
                                                 <br />
                                             </Typography>
                                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                                {item.lastMessage}
+                                                {item.attributes.phone}
                                             </Typography>
                                         </div>
                                     </CardContent>
                                 </Card>
                             </Box>
                         ))
-                    }
+                    } */}
                 </>
             </div>
         </div>

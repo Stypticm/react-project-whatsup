@@ -5,7 +5,8 @@ import { InputMessage } from "./InputMessage";
 import styles from './RightColumn.module.scss';
 import { Divider } from "@mui/material";
 
-export const RightColumn = () => {
+export const RightColumn:React.FC = () => {
+
   return (
     <div className={styles.main_container}>
       <RightNavBar />

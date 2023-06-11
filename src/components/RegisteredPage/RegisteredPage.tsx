@@ -25,7 +25,7 @@ interface SignUpFormValues extends User {
     password: string;
 }
 
-export const RegisteredPage: React.FC = () => {
+export const RegisteredPage = () => {
     const { state, dispatch } = React.useContext(AppContext);
     const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormValues>({
         defaultValues: {

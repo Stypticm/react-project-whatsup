@@ -10,7 +10,7 @@ import styles from './MainContent.module.scss'
 import { AppContext } from '../../../context/WindowPageContext';
 import { ChatType } from '../../../context/types';
 
-export const MainContent: React.FC = () => {
+export const MainContent = () => {
 
   const { state } = React.useContext(AppContext)
 

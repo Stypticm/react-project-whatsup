@@ -22,7 +22,7 @@ type formProps = {
     password: string;
 }
 
-export const WelcomePage: React.FC = () => {
+export const WelcomePage= () => {
     const { state, dispatch } = React.useContext(AppContext);
     const [receiptId, setReceiptId] = React.useState<number>(0);
     const [error, setError] = React.useState<boolean>(false);

@@ -30,7 +30,7 @@ const App = () => {
   }, [])
 
   return (
-    <div className={styles.main_container}>
+    <>
       {
         state.isRegistered || token !== null ?
           <>
@@ -38,11 +38,10 @@ const App = () => {
               state.isLoginIn ?
                 <WelcomePage />
                 :
-                <>
+                <div className={styles.main_container}>
                   <div className={styles.left_column}>
                     <LeftColumn />
                   </div>
-                  <Divider orientation="vertical" flexItem />
                   <div className={styles.right_column}>
                     <RightColumn />
                   </div>
@@ -58,13 +57,13 @@ const App = () => {
                   >
                     <DialogQuit />
                   </Backdrop>
-                </>
+                </ div>
             }
           </>
           :
           <RegisteredPage />
       }
-    </div>
+    </>
   )
 }
 

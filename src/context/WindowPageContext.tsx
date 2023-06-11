@@ -15,7 +15,7 @@ const AppContext = createContext<{
 });
 
 
-const AppProvider: React.FC = ({ children }: PropsWithChildren) => {
+const AppProvider = ({ children }: PropsWithChildren) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     return (

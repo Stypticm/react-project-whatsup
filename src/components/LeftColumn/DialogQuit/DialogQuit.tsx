@@ -16,7 +16,7 @@ import { AppContext } from '../../../context/WindowPageContext';
 import { removeToken } from '../../../helpers/token';
 
 
-export const DialogQuit: React.FC = () => {
+export const DialogQuit = () => {
     const { state, dispatch } = React.useContext(AppContext);
     
 

@@ -23,6 +23,7 @@ export const DialogQuit = () => {
     const agreedButton = (): void => {
         dispatch({ type: Types.DIALOG_QUIT, payload: false })
         dispatch({ type: Types.LOGIN_IN, payload: false })
+        dispatch({ type: Types.SET_AUTH, payload: null })
     }
 
     const cancelButton = (): void => {

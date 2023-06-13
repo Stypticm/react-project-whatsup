@@ -3,7 +3,7 @@ import { Types, StateType, initialState,  } from './types';
 
 type ReducerAction = {
     type: Types;
-    payload?: number | string | boolean ;
+    payload?: number | string | boolean | [];
 }
 
 export const reducer = (state: StateType, action: ReducerAction): typeof initialState => {
@@ -46,6 +46,16 @@ export const reducer = (state: StateType, action: ReducerAction): typeof initial
             return {
                 ...state,
                 isLoginIn: !state.isLoginIn
+            }
+        case Types.SET_USER:
+            return {
+                ...state,
+                current_email: action.payload as string
+            }
+        case Types.SET_CONTACTS:
+            return {
+                ...state,
+                contacts: action.payload as []
             }
         default: throw new Error('Unexpected action');
     }

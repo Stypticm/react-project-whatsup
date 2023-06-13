@@ -9,10 +9,10 @@
 }
 
 .left_column {
-  background-color: #667781;
-  border-right: 1px solid #667781;
+  background-color: var(--left-column-bg-color);
+  border-right: 1px solid var(--left-column-bg-color);
 }
 
 .right_column {
-  background-color: #00a884;
+  background-color: var(--right-column-bg-color);
 }

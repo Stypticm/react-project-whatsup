@@ -9,6 +9,8 @@ export type StateType = {
     chatIsOpen: boolean;
     isRegistered: boolean;
     isLoginIn: boolean;
+    current_email: string;
+    contacts: [];
 }
 
 
@@ -23,6 +25,8 @@ export const initialState: StateType = {
     chatIsOpen: false,
     isRegistered: true,
     isLoginIn: false,
+    current_email: '',
+    contacts: []
 }
 
 // Action
@@ -38,5 +42,6 @@ export enum Types {
     DIALOG_QUIT = 'DIALOG_QUIT',
     DIALOG_CREATE_CHAT = 'DIALOG_CREATE_CHAT',
     SET_CONTACTS = 'SET_CONTACTS',
-    LOGIN_IN = 'LOGIN_IN'
+    LOGIN_IN = 'LOGIN_IN',
+    SET_USER = 'SET_USER',
 }

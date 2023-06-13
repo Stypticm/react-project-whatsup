@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react'
-import axios from 'axios'
 
 // Context
 import { AppContext } from '../../context/WindowPageContext';
 import { Types } from '../../context/types';
 
 // Material UI
-import { Box, Button, Card, CardActions, CardContent, TextField, Typography } from '@mui/material'
+import { Button, Card, CardContent, Typography } from '@mui/material'
 
 // Styles
 import styles from './RegisteredPage.module.scss';
 
 // React form
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 // Firebase
-import { registerWithEmailAndPassword, User } from '../../firebase/firebase';
+import { registerWithEmailAndPassword } from '../../firebase/firebase';
+import { User } from '@helpers/interfaces';
 
 // interface WelcomePageProps extends React.ComponentPropsWithRef<'button'> {
 // textStatus: boolean;
@@ -26,7 +26,7 @@ interface SignUpFormValues extends User {
 }
 
 export const RegisteredPage = () => {
-    const { state, dispatch } = React.useContext(AppContext);
+    const { dispatch } = React.useContext(AppContext);
     const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormValues>({
         defaultValues: {
             contacts: []

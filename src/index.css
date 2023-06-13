@@ -28,3 +28,8 @@ body {
     background-color: #f5f5f5;
     box-sizing: border-box;
 }
+
+:root {
+	--left-column-bg-color: #667781;
+	--right-column-bg-color: #00a884;
+}

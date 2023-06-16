@@ -1,7 +1,8 @@
 export type MessageProps = {
     contactName: string;
-    timestamp: Date;
+    timestamp: string;
     textMessage: string;
+    uid: string;
 }
 
 export type ContactProps = {
@@ -15,6 +16,6 @@ export interface User {
     firstName: string;
     lastName: string;
     email: string;
-    city: string;
+    phone: string;
     contacts: ContactProps[];
 }

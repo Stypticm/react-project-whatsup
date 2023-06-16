@@ -5,12 +5,13 @@ export type StateType = {
     isDialogCreateChat: boolean;
     isBlur: boolean;
     isOpenDialog: boolean;
-    chatId: null | string;
+    chatIndex: number | null;
     chatIsOpen: boolean;
     isRegistered: boolean;
     isLoginIn: boolean;
     current_email: string;
     contacts: [];
+    messages: [];
 }
 
 
@@ -21,12 +22,13 @@ export const initialState: StateType = {
     isDialogCreateChat: false,
     isBlur: false,
     isOpenDialog: false,
-    chatId: null,
+    chatIndex: null,
     chatIsOpen: false,
     isRegistered: true,
     isLoginIn: false,
     current_email: '',
-    contacts: []
+    contacts: [],
+    messages: [],
 }
 
 // Action
@@ -35,7 +37,7 @@ export enum Types {
     OPEN_CLOSE_DIALOG = 'OPEN_CLOSE_DIALOG',
     OFF_BLUR = 'OFF_BLUR',
     ADD_CHAT = 'ADD_CHAT',
-    CHAT_ID = 'CHAT_ID',
+    CHAT_INDEX = 'CHAT_INDEX',
     CHAT_IS_OPEN = 'CHAT_IS_OPEN',
     GET_MESSAGES = 'GET_MESSAGES',
     SET_AUTH = 'SET_AUTH',
@@ -44,4 +46,5 @@ export enum Types {
     SET_CONTACTS = 'SET_CONTACTS',
     LOGIN_IN = 'LOGIN_IN',
     SET_USER = 'SET_USER',
+    SET_MESSAGES = 'SET_MESSAGES',
 }

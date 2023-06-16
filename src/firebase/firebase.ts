@@ -1,7 +1,7 @@
-import { ContactProps, User } from "@helpers/interfaces";
+import { ContactProps, MessageProps, User } from "@helpers/interfaces";
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
+import { getFirestore, setDoc, doc, updateDoc, getDoc, getDocs, collection, query, where, arrayUnion } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCXnnSQn19614q0gZGdgpZzSpcgvUklAwQ",
@@ -42,23 +42,14 @@ export const registerWithEmailAndPassword = async (user: User, password: string)
     }
 };
 
-export const addContact = async (email: string, contact: ContactProps) => {
+export const getAllUsers = async () => {
     try {
-        const currentContacts = await getContacts(email);
-
-        const contactRef = doc(db, "users", email)
-        await updateDoc(contactRef, {
-            contacts: [
-                ...currentContacts.contacts,
-                {
-                    ...contact
-                }
-            ]
-        })
-        return;
+        const usersRef = collection(db, "users");
+        const usersSnap = await getDocs(usersRef);
+        const users = usersSnap.docs.map(doc => doc.data());
+        return users;
     } catch (err) {
         console.error(err);
-        return err;
     }
 }
 
@@ -67,6 +58,67 @@ export const getContacts = async (email: string) => {
         const contactRef = doc(db, "users", email)
         const contactSnap = await getDoc(contactRef)
         return contactSnap.data();
+    } catch (err) {
+        console.error(err);
+        return err;
+    }
+}
+
+export const getMessages = async (email: string, index: number) => {
+    try {
+        const userRef = query(collection(db, "users"), where("email", "==", email));
+        const userSnap = await getDocs(userRef);
+
+        // const contactRef = doc(db, "users", email)
+        // const contactSnap = await getDoc(contactRef)
+
+        const messages = userSnap.docs[0].data().contacts[index].messages;
+        return messages;
+    }
+    catch (err) {
+        console.error(err);
+        return err;
+    }
+}
+
+export const addContact = async (email: string, contact: ContactProps) => {
+    try {
+        const contactRef = doc(db, "users", email)
+        await updateDoc(contactRef, {
+            contacts: arrayUnion(contact)
+        })
+        return;
+    } catch (err) {
+        console.error(err);
+        return err;
+    }
+}
+
+
+export const addMessage = async (email: string, index: number | null, message: MessageProps, contact: ContactProps) => {
+    try {
+        const currentMessages = await getMessages(email, index ? index : 0);
+
+        const currentContacts = await getContacts(email);
+
+        const contactRef = doc(db, "users", email)
+
+
+        await updateDoc(contactRef, {
+            ...currentContacts,
+            contacts: currentContacts.contacts.map((item: ContactProps, i: number) => {
+                if (i === index) {
+                    return {
+                        ...item,
+                        messages: [...currentMessages, message]
+                    }
+                }
+                return item;
+            })
+        })
+
+
+        return;
     } catch (err) {
         console.error(err);
         return err;

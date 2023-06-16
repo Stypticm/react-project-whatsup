@@ -13,10 +13,10 @@ import { AppContext } from '../../../context/WindowPageContext';
 import { Types } from '../../../context/types';
 
 // Interfaces
-import { ContactProps } from '@helpers/interfaces';
+import { ContactProps, User } from '@helpers/interfaces';
 
 // Firebase
-import { addContact, auth, db, getContacts } from '../../../firebase/firebase';
+import { addContact, auth, db, getAllUsers, getContacts } from '../../../firebase/firebase';
 
 // Hooks
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -33,8 +33,6 @@ interface formProps {
 export const DialogCreateChat = () => {
     const { state, dispatch } = React.useContext(AppContext);
 
-    const [user, loading, error] = useAuthState(auth);
-
     const [formInput, setFormInput] = React.useState<formProps>({
         phoneNumber: '',
         contactName: ''
@@ -44,7 +42,7 @@ export const DialogCreateChat = () => {
         setFormInput({ ...formInput, [e.target.name]: e.target.value })
     };
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
 
         const contact: ContactProps = {
@@ -54,9 +52,23 @@ export const DialogCreateChat = () => {
             messages: []
         }
 
-        addContact(state.current_email, contact);
-        dispatch({ type: Types.SET_CONTACTS, payload: [...state.contacts, contact] })
+        
+        await getAllUsers().then((res: any) => {
+            const user = res.find((item: User) => {
+                return item.phone === contact.contactPhone
+            })
 
+            if (user !== undefined) {
+                if (user.email === state.current_email) {
+                    alert('You can\'t add yourself')
+                } else {
+                    addContact(state.current_email, contact);
+                    dispatch({ type: Types.SET_CONTACTS, payload: [...state.contacts, contact] })
+                }
+            } else {
+                alert('User not found')
+            }
+        })
 
         setFormInput({ phoneNumber: '', contactName: '' });
         dispatch({ type: Types.DIALOG_CREATE_CHAT })

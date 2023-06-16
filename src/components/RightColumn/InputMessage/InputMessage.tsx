@@ -11,16 +11,15 @@ import styles from './InputMessage.module.scss'
 
 // Context
 import { AppContext } from '../../../context/WindowPageContext';
+import { ContactProps, MessageProps } from '@helpers/interfaces';
 
-// Helpers
-import { API, BEARER } from '../../../helpers/constants';
-import { getToken } from '../../../helpers/token';
-import { MessageType } from '../../../context';
+// UUID
+import { v4 as uuid } from 'uuid';
+import { addMessage } from '../../../firebase/firebase';
+import { Types } from '../../../context/index';
 
 export const InputMessage = () => {
-  const { state } = React.useContext(AppContext)
-  const token = getToken();
-  const userId = localStorage.getItem('userId');
+  const { state, dispatch } = React.useContext(AppContext)
 
   const [sendBtn, setSendBtn] = React.useState(false);
   const [inputText, setInputText] = React.useState('');
@@ -28,33 +27,27 @@ export const InputMessage = () => {
   const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const message: MessageType = {
-      senderId: userId?.toString() || "",
+    const date = new Date().getDate() + '.' + new Date().getMonth() + '.' + new Date().getFullYear();
+
+    const message: MessageProps = {
+      contactName: state.current_email,
+      timestamp: date,
       textMessage: inputText,
-      timestamp: new Date()
+      uid: uuid()
     }
 
-    axios.put(`${API}/contacts/${state.chatId}?populate[0]=messages`, {
-      data: {
-        messages: message
-      }
-    }, {
-      headers: {
-        'Authorization': `${BEARER} ${token}`,
-        'Content-Type': 'application/json'
-      }
-    }).then(res => {
-      console.log(res.data.data.attributes)
-    }).catch(err => {
-      console.log(err)
-    })
+    const contact: ContactProps = state.contacts[state.chatIndex];
+
+    addMessage(state.current_email, state.chatIndex, message, contact)
+    dispatch({ type: Types.SET_MESSAGES, payload: [...state.messages, message] })
+
     setInputText('')
   }
 
   return (
     <div className={styles.input_container}>
       {
-        state.chatId !== null ?
+        state.chatIndex !== null ?
           <form onSubmit={handleSendMessage}>
             <Stack
               className={styles.input_content}

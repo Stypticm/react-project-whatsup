@@ -68,10 +68,6 @@ export const getMessages = async (email: string, index: number) => {
     try {
         const userRef = query(collection(db, "users"), where("email", "==", email));
         const userSnap = await getDocs(userRef);
-
-        // const contactRef = doc(db, "users", email)
-        // const contactSnap = await getDoc(contactRef)
-
         const messages = userSnap.docs[0].data().contacts[index].messages;
         return messages;
     }
@@ -94,15 +90,30 @@ export const addContact = async (email: string, contact: ContactProps) => {
     }
 }
 
+const getCompanionUsers = async (contactPhone: string) => {
+    try {
+        const allUsers = await getAllUsers() as User[];
+        const companionUsers = allUsers.find(user => user.phone === contactPhone);
+        return companionUsers;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 
 export const addMessage = async (email: string, index: number | null, message: MessageProps, contact: ContactProps) => {
     try {
+        const contactRef = doc(db, "users", email);
+        const currentContacts = await getContacts(email) as User;
         const currentMessages = await getMessages(email, index ? index : 0);
 
-        const currentContacts = await getContacts(email);
-
-        const contactRef = doc(db, "users", email)
-
+        const companionUser = await getCompanionUsers(contact.contactPhone);
+        const companionEmail = companionUser?.email;
+        const companionRef = doc(db, "users", companionEmail ? companionEmail : "null");
+        const companionContacts = await getContacts(companionEmail ? companionEmail : "null") as User;
+        const companionIndex = companionContacts?.contacts.findIndex(item => item.contactEmail === email);
+        const companionMessages = await getMessages(companionEmail ? companionEmail : "null", companionIndex ? companionIndex : 0);
+        const companionIsConnected = companionContacts?.contacts[companionIndex ? companionIndex : 0]
 
         await updateDoc(contactRef, {
             ...currentContacts,
@@ -116,6 +127,40 @@ export const addMessage = async (email: string, index: number | null, message: M
                 return item;
             })
         })
+
+        if (companionIsConnected) {
+            await updateDoc(companionRef, {
+                ...companionContacts,
+                contacts: companionContacts.contacts.map((item: ContactProps, i: number) => {
+                    if (i === companionIndex) {
+                        return {
+                            ...item,
+                            messages: [...companionMessages, message]
+                        }
+                    }
+                    return item;
+                })
+            })
+        } else {
+            await updateDoc(companionRef, {
+                ...companionContacts,
+                contacts: [...companionContacts.contacts, contact]
+            }).then(() => {
+                updateDoc(companionRef, {
+                    ...companionContacts,
+                    contacts: companionContacts.contacts.map((item: ContactProps, i: number) => {
+                        if (i === companionIndex) {
+                            return {
+                                ...item,
+                                messages: [...companionMessages, message]
+                            }
+                        }
+                        return item;
+                    })
+                })
+            })
+
+        }
 
 
         return;

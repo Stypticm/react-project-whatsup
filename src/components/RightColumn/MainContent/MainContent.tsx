@@ -13,7 +13,6 @@ import { MessageProps } from '@helpers/interfaces';
 export const MainContent = () => {
 
   const { state } = React.useContext(AppContext)
-  console.log(state.messages)
 
   return (
     <div className={styles.main_content}>
@@ -47,6 +46,7 @@ export const MainContent = () => {
                           <br />
                         </Typography>
                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                          {item.timestamp}
                         </Typography>
                       </CardContent>
                     </Card>

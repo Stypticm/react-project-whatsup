@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 
 // Material UI
 import InputBase from '@mui/material/InputBase';
@@ -27,7 +26,7 @@ export const InputMessage = () => {
   const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const date = new Date().getDate() + '.' + new Date().getMonth() + '.' + new Date().getFullYear();
+    const date = new Date().toLocaleString();
 
     const message: MessageProps = {
       contactName: state.current_email,
@@ -36,7 +35,7 @@ export const InputMessage = () => {
       uid: uuid()
     }
 
-    const contact: ContactProps = state.contacts[state.chatIndex];
+    const contact: ContactProps = state.contacts[state.chatIndex as number];
 
     addMessage(state.current_email, state.chatIndex, message, contact)
     dispatch({ type: Types.SET_MESSAGES, payload: [...state.messages, message] })

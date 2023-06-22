@@ -8,6 +8,7 @@ export type MessageProps = {
 export type ContactProps = {
     contactName: string;
     contactPhone: string;
+    contactEmail: string;
     uid: string;
     messages: MessageProps[];
 }

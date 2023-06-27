@@ -20,7 +20,6 @@ import { Types } from '../../../context/index';
 export const InputMessage = () => {
   const { state, dispatch } = React.useContext(AppContext)
 
-  const [sendBtn, setSendBtn] = React.useState(false);
   const [inputText, setInputText] = React.useState('');
 
   const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
@@ -38,7 +37,7 @@ export const InputMessage = () => {
     const contact: ContactProps = state.contacts[state.chatIndex as number];
 
     addMessage(state.current_email, state.chatIndex, message, contact)
-    dispatch({ type: Types.SET_MESSAGES, payload: [...state.messages, message] })
+    dispatch({ type: Types.SET_MESSAGES, payload: [message, ...state.messages] })
 
     setInputText('')
   }
@@ -56,7 +55,6 @@ export const InputMessage = () => {
                   <InputBase
                     sx={{ ml: 1, flex: 1 }}
                     placeholder="Send message"
-                    onFocus={() => setSendBtn(true)}
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     fullWidth

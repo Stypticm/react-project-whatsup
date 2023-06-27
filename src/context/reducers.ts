@@ -1,5 +1,5 @@
 
-import { Types, StateType, initialState,  } from './types';
+import { Types, StateType, initialState, } from './types';
 
 type ReducerAction = {
     type: Types;
@@ -61,6 +61,11 @@ export const reducer = (state: StateType, action: ReducerAction): typeof initial
             return {
                 ...state,
                 messages: action.payload as []
+            }
+        case Types.DELETE_ALL:
+            return {
+                ...state,
+                isDialogDeleteAllMessages: !state.isDialogDeleteAllMessages
             }
         default: throw new Error('Unexpected action');
     }

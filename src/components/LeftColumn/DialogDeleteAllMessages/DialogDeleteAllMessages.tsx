@@ -4,27 +4,25 @@ import React from 'react'
 import { Button, Card, CardActions, CardContent, Typography } from '@mui/material'
 
 // Styles
-import styles from './DialogQuit.module.scss';
+import styles from './DialogDeleteAllMessages.module.scss';
 
 // Context
 import { Types } from '../../../context/types';
 import { AppContext } from '../../../context/WindowPageContext';
+import { deleteAllMessages } from '../../../firebase/firebase';
 
 
-export const DialogQuit = () => {
-    const { dispatch } = React.useContext(AppContext);
-
+export const DialogDeleteAllMessages = () => {
+    const { state, dispatch } = React.useContext(AppContext);
 
     const agreedButton = (): void => {
-        dispatch({ type: Types.DIALOG_QUIT, payload: false })
-        dispatch({ type: Types.LOGIN_IN, payload: false })
-        dispatch({ type: Types.SET_AUTH, payload: null })
-        dispatch({ type: Types.SET_MESSAGES, payload: [] })
-        dispatch({ type: Types.CHAT_INDEX, payload: null })
+        dispatch({ type: Types.SET_MESSAGES, payload: [] });
+        deleteAllMessages(state.current_email, state.chatIndex as number);
+        dispatch({ type: Types.DELETE_ALL });
     }
 
     const cancelButton = (): void => {
-        dispatch({ type: Types.DIALOG_QUIT })
+        dispatch({ type: Types.DELETE_ALL })
     }
 
     return (
@@ -32,7 +30,7 @@ export const DialogQuit = () => {
             <Card className={styles.dialogWindow}>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                        Are you sure you want to quit?
+                        Are you sure you want to delete all messages?
                     </Typography>
                     <CardActions className={styles.buttons}>
                         <Button size="small" type='button' onClick={agreedButton}>Yes</Button>
@@ -44,4 +42,4 @@ export const DialogQuit = () => {
     )
 }
 
-export default DialogQuit
+export default DialogDeleteAllMessages;

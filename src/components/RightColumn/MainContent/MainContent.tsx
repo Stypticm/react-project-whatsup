@@ -14,10 +14,14 @@ export const MainContent = () => {
 
   const { state } = React.useContext(AppContext)
 
+  const sortedMessages = state.messages.sort((a: MessageProps, b: MessageProps) => {
+    return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+  })
+
   return (
     <div className={styles.main_content}>
       {
-        state.messages.map((item: MessageProps) =>
+        sortedMessages.map((item: MessageProps) =>
           <div key={item.uid}>
             {
               item.contactName === `${state.current_email}` ?

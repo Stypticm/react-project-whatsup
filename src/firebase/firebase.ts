@@ -169,3 +169,28 @@ export const addMessage = async (email: string, index: number | null, message: M
         return err;
     }
 }
+
+export const deleteAllMessages = async (email: string, index: number) => {
+    try {
+        const contactRef = doc(db, "users", email);
+        const currentContacts = await getContacts(email) as User;
+
+        await updateDoc(contactRef, {
+            ...currentContacts,
+            contacts: currentContacts.contacts.map((item: ContactProps, i: number) => {
+                if (i === index) {
+                    return {
+                        ...item,
+                        messages: []
+                    }
+                }
+                return item;
+            })
+        })
+
+        return;
+    } catch (err) {
+        console.error(err);
+        return err;
+    }
+}

@@ -14,15 +14,16 @@ import styles from './WelcomePage.module.scss';
 import { useForm } from 'react-hook-form';
 
 // Firebase
-import { getAllUsers, getContacts, logInWithEmailAndPassword } from '../../firebase/firebase';
+import { getContacts, logInWithEmailAndPassword } from '../../firebase/firebase';
+import { ContactProps, User } from '@helpers/interfaces';
 
 
 export const WelcomePage = () => {
     const { dispatch } = React.useContext(AppContext);
 
-    const [err, setError] = React.useState<boolean>(false);
+    const [error, setError] = React.useState<boolean>(false);
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit } = useForm();
 
     const singUp = (): void => {
         dispatch({
@@ -39,17 +40,17 @@ export const WelcomePage = () => {
                         Welcome to the chat!
                     </Typography>
                     {
-                        err ? <Alert severity="error">Incorrect email or password!</Alert> : ''
+                        error ? <Alert severity="error">Incorrect email or password!</Alert> : ''
                     }
                     <div className={styles.page}>
                         <form className={styles.sign_up_form} onSubmit={handleSubmit(
                             async ({ password, email }) => {
-                                const user = await logInWithEmailAndPassword(email, password);
+                                const user = await logInWithEmailAndPassword(email, password) as User;
 
                                 const contacts = await getContacts(email).then((res: any) => {
                                     return res.contacts;
-                                });
-
+                                }) as ContactProps[];
+                                
                                 if (user.email) {
                                     dispatch({
                                         type: Types.LOGIN_IN

@@ -3,14 +3,18 @@ import React from 'react';
 //Material UI
 import { Box, Stack, IconButton, InputBase } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import CloseIcon from '@mui/icons-material/Close';
 import { AccountCircle } from '@mui/icons-material';
 
 //Styles
 import styles from './RightNavBar.module.scss'
+import { AppContext } from '../../../context/WindowPageContext';
+import { Types } from '../../../context/types';
 
 export const RightNavBar = () => {
+
+  const { state, dispatch } = React.useContext(AppContext);
 
   // Search button
   const [searchBtn, setSearchBtn] = React.useState(false);
@@ -23,6 +27,10 @@ export const RightNavBar = () => {
   const closeButton = () => {
     setSearchText('');
     setSearchBtn(false);
+  }
+
+  const dialogDeleteWindow = () => {
+    dispatch({ type: Types.DELETE_ALL })
   }
 
   return (
@@ -41,6 +49,18 @@ export const RightNavBar = () => {
         </Box>
         <Box>
           {
+            state.chatIndex !== null ?
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                sx={{ mr: 1 }}
+                onClick={dialogDeleteWindow}
+              >
+                <DeleteForeverIcon />
+              </IconButton> : ''
+          }
+          {
             searchBtn ?
               <InputBase
                 placeholder="Search words or text"
@@ -57,8 +77,7 @@ export const RightNavBar = () => {
                 sx={{ mr: 1 }}
                 onClick={searchButton}
               >
-                <SearchIcon
-                />
+                <SearchIcon />
               </IconButton> : <IconButton
                 size="large"
                 edge="start"
@@ -70,7 +89,6 @@ export const RightNavBar = () => {
                 />
               </IconButton>
           }
-
         </Box>
       </Stack>
     </div>

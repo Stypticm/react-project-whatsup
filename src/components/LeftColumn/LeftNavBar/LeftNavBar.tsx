@@ -17,7 +17,7 @@ import { AppContext } from '../../../context/WindowPageContext';
 
 
 export const LeftNavBar = () => {
-  const { state, dispatch } = React.useContext(AppContext);
+  const { dispatch } = React.useContext(AppContext);
 
   const dialogQuitWindow = () => {
     dispatch({ type: Types.DIALOG_QUIT })

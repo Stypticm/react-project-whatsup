@@ -12,18 +12,16 @@ import styles from './DialogQuit.module.scss';
 import { Types } from '../../../context/types';
 import { AppContext } from '../../../context/WindowPageContext';
 
-// Helpers
-import { removeToken } from '../../../helpers/token';
-
 
 export const DialogQuit = () => {
-    const { state, dispatch } = React.useContext(AppContext);
-    
+    const { dispatch } = React.useContext(AppContext);
+
 
     const agreedButton = (): void => {
         dispatch({ type: Types.DIALOG_QUIT, payload: false })
         dispatch({ type: Types.LOGIN_IN, payload: false })
         dispatch({ type: Types.SET_AUTH, payload: null })
+        dispatch({ type: Types.SET_MESSAGES, payload: [] })
     }
 
     const cancelButton = (): void => {

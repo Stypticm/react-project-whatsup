@@ -13,13 +13,10 @@ import { AppContext } from '../../../context/WindowPageContext';
 import { Types } from '../../../context/types';
 
 // Interfaces
-import { ContactProps } from '@helpers/interfaces';
+import { ContactProps, User } from '@helpers/interfaces';
 
 // Firebase
-import { addContact, auth, db, getContacts } from '../../../firebase/firebase';
-
-// Hooks
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { addContact, getAllUsers, getContacts } from '../../../firebase/firebase';
 
 // UUID
 import { v4 as uuid } from 'uuid';
@@ -33,8 +30,6 @@ interface formProps {
 export const DialogCreateChat = () => {
     const { state, dispatch } = React.useContext(AppContext);
 
-    const [user, loading, error] = useAuthState(auth);
-
     const [formInput, setFormInput] = React.useState<formProps>({
         phoneNumber: '',
         contactName: ''
@@ -44,19 +39,46 @@ export const DialogCreateChat = () => {
         setFormInput({ ...formInput, [e.target.name]: e.target.value })
     };
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
         event.preventDefault();
 
         const contact: ContactProps = {
             contactName: formInput.contactName,
             contactPhone: formInput.phoneNumber,
+            contactEmail: '',
             uid: uuid(),
             messages: []
         }
 
-        addContact(state.current_email, contact);
-        dispatch({ type: Types.SET_CONTACTS, payload: [...state.contacts, contact] })
 
+        await getAllUsers().then((res: any) => {
+            const user = res.find((item: User) => {
+                return item.phone === contact.contactPhone
+            })
+
+
+            if (user !== undefined) {
+                if (user.email === state.current_email) {
+                    alert('You can\'t add yourself')
+                } else {
+                    const addedContact: ContactProps = contact;
+                    if (state.contacts.find((item: ContactProps) => item.contactPhone === addedContact.contactPhone)) {
+                        alert('This contact already exists')
+                    } else {
+                        addContact(state.current_email, {
+                            ...contact, contactName: user.firstName, contactEmail: user.email
+                        });
+                        dispatch({
+                            type: Types.SET_CONTACTS, payload: [...state.contacts, {
+                                ...contact, contactName: user.firstName
+                            }]
+                        })
+                    }
+                }
+            } else {
+                alert('User not found')
+            }
+        })
 
         setFormInput({ phoneNumber: '', contactName: '' });
         dispatch({ type: Types.DIALOG_CREATE_CHAT })
@@ -84,14 +106,15 @@ export const DialogCreateChat = () => {
                             onChange={handleInput}
                             fullWidth
                         />
-                        <TextField
+                        {/* <TextField
                             name="contactName"
                             helperText="Please enter name of contact"
                             label="Contact Name"
                             value={formInput.contactName}
                             onChange={handleInput}
+                            disabled
                             fullWidth
-                        />
+                        /> */}
                         <CardActions className={styles.buttons}>
                             <Button size="small" type='submit'>Create</Button>
                             <Button size="small" type='button' onClick={cancelButton}>Cancel</Button>

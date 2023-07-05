@@ -53,6 +53,7 @@ export const RegisteredPage = () => {
                                 registerWithEmailAndPassword(user, password)
                             }
                         )}>
+                            <input type="phone" {...register("phone")} placeholder='Phone number' />
                             <input type="firstName" {...register("firstName")} placeholder='First name' />
                             <input type="lastName" {...register("lastName")} placeholder='Last name' />
                             <input type="email" {...register("email")} placeholder='Email' />

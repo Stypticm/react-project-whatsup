@@ -16,15 +16,19 @@ import { Types } from '../../../context/types';
 // Components
 import { Search } from '../Search';
 import { ContactProps } from '@helpers/interfaces';
+import { getMessages } from '../../../firebase/firebase';
 
 export const Chats = () => {
 
     const { state, dispatch } = React.useContext(AppContext)
 
-    const handleClickGetChat = (id: string) => {
-        console.log(id);
-        dispatch({ type: Types.CHAT_ID, payload: id })
+    const handleClickGetChat = async (id: string, index: number) => {
+        dispatch({ type: Types.CHAT_INDEX, payload: index })
         dispatch({ type: Types.CHAT_IS_OPEN })
+
+        await getMessages(state.current_email, index).then((res) => {
+            dispatch({ type: Types.SET_MESSAGES, payload: res })
+        })
     }
 
     return (
@@ -35,7 +39,7 @@ export const Chats = () => {
                     <Divider />
                     {
                         state.contacts.map((item: ContactProps, index) => (
-                            <Box key={item.uid} sx={{ cursor: 'pointer' }} onClick={() => handleClickGetChat(index.toString())}>
+                            <Box key={item.uid} sx={{ cursor: 'pointer' }} onClick={() => handleClickGetChat(item.uid, index)}>
                                 <Card>
                                     <CardContent className={styles.chatContent}>
                                         <AccountCircle color='secondary' fontSize='large' />

@@ -14,7 +14,7 @@ import styles from './WelcomePage.module.scss';
 import { useForm } from 'react-hook-form';
 
 // Firebase
-import { getContacts, logInWithEmailAndPassword } from '../../firebase/firebase';
+import { getAllUsers, getContacts, logInWithEmailAndPassword } from '../../firebase/firebase';
 
 
 export const WelcomePage = () => {

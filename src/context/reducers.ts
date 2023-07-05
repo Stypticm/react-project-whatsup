@@ -29,9 +29,9 @@ export const reducer = (state: StateType, action: ReducerAction): typeof initial
             return {
                 ...state, isBlur: false
             }
-        case Types.CHAT_ID:
+        case Types.CHAT_INDEX:
             return {
-                ...state, chatId: action.payload as string
+                ...state, chatIndex: action.payload as number
             }
         case Types.CHAT_IS_OPEN:
             return {
@@ -56,6 +56,11 @@ export const reducer = (state: StateType, action: ReducerAction): typeof initial
             return {
                 ...state,
                 contacts: action.payload as []
+            }
+        case Types.SET_MESSAGES:
+            return {
+                ...state,
+                messages: action.payload as []
             }
         default: throw new Error('Unexpected action');
     }

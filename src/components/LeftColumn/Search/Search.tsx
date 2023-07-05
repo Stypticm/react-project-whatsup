@@ -16,7 +16,7 @@ import { AppContext } from '../../../context/WindowPageContext';
 // Types
 import { Types } from '../../../context/types';
 
-export const Search: React.FC = () => {
+export const Search = () => {
   const { state, dispatch } = React.useContext(AppContext);
 
   const [searchBtn, setSearchBtn] = React.useState(false);

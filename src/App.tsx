@@ -4,7 +4,7 @@ import React from 'react'
 import { AppContext } from '@context/WindowPageContext';
 
 // Material UI
-import { Backdrop, Divider } from '@mui/material'
+import { Backdrop } from '@mui/material'
 import { LeftColumn, WelcomePage, RightColumn } from '@components/index'
 
 // Styles
@@ -15,34 +15,22 @@ import { DialogCreateChat } from '@components/LeftColumn/DialogCreateChat/Dialog
 import { DialogQuit } from '@components/LeftColumn/DialogQuit/DialogQuit';
 import { RegisteredPage } from '@components/RegisteredPage';
 
-// Helpers
-import { getToken } from '@helpers/token';
-import { getContacts } from '@helpers/getContacts';
-
 const App = () => {
-  const { state, dispatch } = React.useContext(AppContext);
-  const token = getToken();
-
-  React.useEffect(() => {
-    getContacts().then((res: any) => {
-      setContacts([...res.data.data])
-    })
-  }, [])
+  const { state } = React.useContext(AppContext);
 
   return (
-    <div className={styles.main_container}>
+    <>
       {
-        state.isRegistered || token !== null ?
+        state.isRegistered ?
           <>
             {
-              state.isLoginIn ?
+              !state.isLoginIn ?
                 <WelcomePage />
                 :
-                <>
+                <div className={styles.main_container}>
                   <div className={styles.left_column}>
                     <LeftColumn />
                   </div>
-                  <Divider orientation="vertical" flexItem />
                   <div className={styles.right_column}>
                     <RightColumn />
                   </div>
@@ -58,13 +46,13 @@ const App = () => {
                   >
                     <DialogQuit />
                   </Backdrop>
-                </>
+                </ div>
             }
           </>
           :
           <RegisteredPage />
       }
-    </div>
+    </>
   )
 }
 

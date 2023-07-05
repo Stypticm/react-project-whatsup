@@ -17,7 +17,7 @@ import { API, BEARER } from '../../../helpers/constants';
 import { getToken } from '../../../helpers/token';
 import { MessageType } from '../../../context';
 
-export const InputMessage: React.FC = () => {
+export const InputMessage = () => {
   const { state } = React.useContext(AppContext)
   const token = getToken();
   const userId = localStorage.getItem('userId');

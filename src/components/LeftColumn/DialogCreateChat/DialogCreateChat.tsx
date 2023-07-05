@@ -1,6 +1,4 @@
 import React from 'react'
-import { v4 as uuidv4 } from 'uuid';
-import axios from 'axios';
 
 // Material UI
 import { Button, Card, CardActions, CardContent, TextField, Typography } from '@mui/material'
@@ -14,10 +12,18 @@ import { AppContext } from '../../../context/WindowPageContext';
 // Types
 import { Types } from '../../../context/types';
 
-// Helpers
-import { getToken } from '../../../helpers/token';
-import { API, BEARER } from '../../../helpers/constants';
-import { getContacts } from '../../../helpers/getContacts';
+// Interfaces
+import { ContactProps } from '@helpers/interfaces';
+
+// Firebase
+import { addContact, auth, db, getContacts } from '../../../firebase/firebase';
+
+// Hooks
+import { useAuthState } from 'react-firebase-hooks/auth';
+
+// UUID
+import { v4 as uuid } from 'uuid';
+
 
 interface formProps {
     phoneNumber: string;
@@ -26,6 +32,8 @@ interface formProps {
 
 export const DialogCreateChat = () => {
     const { state, dispatch } = React.useContext(AppContext);
+
+    const [user, loading, error] = useAuthState(auth);
 
     const [formInput, setFormInput] = React.useState<formProps>({
         phoneNumber: '',
@@ -39,42 +47,24 @@ export const DialogCreateChat = () => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
         event.preventDefault();
 
-        const userId = localStorage.getItem('userId') || '';
-        const token = getToken();
-        
-        const newContact: any = {
-            name: formInput.contactName,
-            contactId: uuidv4(),
-            phone: formInput.phoneNumber,
-            messages: [],
-            user: {
-                set: [
-                    { id: userId }
-                ]
-            }
+        const contact: ContactProps = {
+            contactName: formInput.contactName,
+            contactPhone: formInput.phoneNumber,
+            uid: uuid(),
+            messages: []
         }
 
-        axios.post(`${API}/contacts`, {
-            data: newContact
-        }, {
-            headers: {
-                'Authorization': `${BEARER} ${token}`,
-                'Content-Type': 'application/json'
-            }
-        }).then((res) => {
-            getContacts().then((res: any) => {
-                // setContacts([...res.data.data])
-            })
-        }).catch((err) => {
-            console.log(err)
-        })
+        addContact(state.current_email, contact);
+        dispatch({ type: Types.SET_CONTACTS, payload: [...state.contacts, contact] })
+
 
         setFormInput({ phoneNumber: '', contactName: '' });
         dispatch({ type: Types.DIALOG_CREATE_CHAT })
-
+        getContacts(state.current_email)
     }
 
     const cancelButton = (): void => {
+        setFormInput({ phoneNumber: '', contactName: '' });
         dispatch({ type: Types.DIALOG_CREATE_CHAT })
     }
 

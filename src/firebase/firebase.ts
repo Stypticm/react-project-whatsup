@@ -1,6 +1,7 @@
+import { ContactProps, User } from "@helpers/interfaces";
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCXnnSQn19614q0gZGdgpZzSpcgvUklAwQ",
@@ -15,30 +16,10 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-type Message = {
-    contactName: string;
-    timestamp: Date;
-    textMessage: string;
-}
-
-type Contact = {
-    contactName: string;
-    contactPhone: string;
-    messages: Message[];
-}
-
-export interface User {
-    firstName: string;
-    lastName: string;
-    email: string;
-    city: string;
-    contacts: Contact[];
-}
-
 
 export const logInWithEmailAndPassword = async (email: string, password: string) => {
     try {
-        const userCredential = signInWithEmailAndPassword(auth, email, password)
+        const userCredential = signInWithEmailAndPassword(auth, email, password);
         return (await userCredential).user;
     } catch (err) {
         console.error(err);
@@ -48,17 +29,46 @@ export const logInWithEmailAndPassword = async (email: string, password: string)
 
 export const registerWithEmailAndPassword = async (user: User, password: string) => {
     try {
-        const response = await createUserWithEmailAndPassword(auth, user.email, password);
+        await createUserWithEmailAndPassword(auth, user.email, password);
 
-        await addDoc(collection(db, "users"), {
+        await setDoc(doc(db, "users", user.email), {
             ...user,
-            uid: response.user.uid,
             authProvider: "local"
         });
-
         return;
     } catch (err) {
         console.error(err);
         return err;
     }
 };
+
+export const addContact = async (email: string, contact: ContactProps) => {
+    try {
+        const currentContacts = await getContacts(email);
+
+        const contactRef = doc(db, "users", email)
+        await updateDoc(contactRef, {
+            contacts: [
+                ...currentContacts.contacts,
+                {
+                    ...contact
+                }
+            ]
+        })
+        return;
+    } catch (err) {
+        console.error(err);
+        return err;
+    }
+}
+
+export const getContacts = async (email: string) => {
+    try {
+        const contactRef = doc(db, "users", email)
+        const contactSnap = await getDoc(contactRef)
+        return contactSnap.data();
+    } catch (err) {
+        console.error(err);
+        return err;
+    }
+}

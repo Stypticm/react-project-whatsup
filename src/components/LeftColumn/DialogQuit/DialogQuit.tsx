@@ -16,13 +16,14 @@ import { AppContext } from '../../../context/WindowPageContext';
 import { removeToken } from '../../../helpers/token';
 
 
-export const DialogQuit: React.FC = () => {
+export const DialogQuit = () => {
     const { state, dispatch } = React.useContext(AppContext);
     
 
     const agreedButton = (): void => {
         dispatch({ type: Types.DIALOG_QUIT, payload: false })
         dispatch({ type: Types.LOGIN_IN, payload: false })
+        dispatch({ type: Types.SET_AUTH, payload: null })
     }
 
     const cancelButton = (): void => {

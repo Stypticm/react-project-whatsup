@@ -1,31 +1,27 @@
-import React, { useEffect } from 'react'
-import axios from 'axios'
+import React from 'react'
 
 // Context
 import { AppContext } from '@context/WindowPageContext';
 import { Types } from '@context/types';
 
 // Material UI
-import { Alert, Box, Button, Card, CardActions, CardContent, TextField, Typography } from '@mui/material'
+import { Alert, Button, Card, CardContent, Typography } from '@mui/material'
 
 // Styles
 import styles from './WelcomePage.module.scss';
 
 // React form
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 // Firebase
-import { logInWithEmailAndPassword } from '../../firebase/firebase';
+import { getContacts, logInWithEmailAndPassword } from '../../firebase/firebase';
 
-type formProps = {
-    email: string;
-    password: string;
-}
 
-export const WelcomePage: React.FC = () => {
-    const { state, dispatch } = React.useContext(AppContext);
-    const [receiptId, setReceiptId] = React.useState<number>(0);
-    const [error, setError] = React.useState<boolean>(false);
+export const WelcomePage = () => {
+    const { dispatch } = React.useContext(AppContext);
+
+    const [err, setError] = React.useState<boolean>(false);
+
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const singUp = (): void => {
@@ -43,18 +39,31 @@ export const WelcomePage: React.FC = () => {
                         Welcome to the chat!
                     </Typography>
                     {
-                        error ? <Alert severity="error">Incorrect email or password!</Alert> : ''
+                        err ? <Alert severity="error">Incorrect email or password!</Alert> : ''
                     }
                     <div className={styles.page}>
                         <form className={styles.sign_up_form} onSubmit={handleSubmit(
                             async ({ password, email }) => {
                                 const user = await logInWithEmailAndPassword(email, password);
-                                
+
+                                const contacts = await getContacts(email).then((res: any) => {
+                                    return res.contacts;
+                                });
+
                                 if (user.email) {
                                     dispatch({
-                                        type: Types.LOGIN_IN,
-                                        payload: true
+                                        type: Types.LOGIN_IN
                                     })
+                                    dispatch({
+                                        type: Types.SET_USER,
+                                        payload: email
+                                    })
+                                    dispatch({
+                                        type: Types.SET_CONTACTS,
+                                        payload: contacts
+                                    })
+                                } else {
+                                    setError(true);
                                 }
                             }
                         )}>

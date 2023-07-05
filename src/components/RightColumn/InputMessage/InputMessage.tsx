@@ -9,13 +9,17 @@ import SendIcon from '@mui/icons-material/Send';
 import styles from './InputMessage.module.scss'
 
 // Context
-import { AppContext } from '../../../context/WindowPageContext';
+import { AppContext } from '@context/WindowPageContext';
+
+// Helpers
 import { ContactProps, MessageProps } from '@helpers/interfaces';
 
-// UUID
-import { v4 as uuid } from 'uuid';
+// Types context
+import { Types } from '@context/types';
+
+// Firebase
 import { addMessage } from '../../../firebase/firebase';
-import { Types } from '../../../context/index';
+
 
 export const InputMessage = () => {
   const { state, dispatch } = React.useContext(AppContext)

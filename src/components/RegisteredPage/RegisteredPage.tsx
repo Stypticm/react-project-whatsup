@@ -15,15 +15,9 @@ import { useForm } from 'react-hook-form';
 
 // Firebase
 import { registerWithEmailAndPassword } from '../../firebase/firebase';
-import { User } from '@helpers/interfaces';
 
-// interface WelcomePageProps extends React.ComponentPropsWithRef<'button'> {
-// textStatus: boolean;
-// }
-
-interface SignUpFormValues extends User {
-    password: string;
-}
+// Interfaces
+import { SignUpFormValues } from '@helpers/interfaces';
 
 export const RegisteredPage = () => {
     const { dispatch } = React.useContext(AppContext);

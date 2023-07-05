@@ -11,10 +11,10 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import styles from './Search.module.scss';
 
 // Context
-import { AppContext } from '../../../context/WindowPageContext';
+import { AppContext } from '@context/WindowPageContext';
 
-// Types
-import { Types } from '../../../context/types';
+// Types context
+import { Types } from '@context/types';
 
 export const Search = () => {
   const { state, dispatch } = React.useContext(AppContext);

@@ -1,16 +1,15 @@
 import React from 'react';
 
 //Material UI
-import MenuIcon from '@mui/icons-material/Menu';
-import { Box, MenuItem, Stack, AppBar, IconButton } from '@mui/material';
+import { Box, Stack, AppBar, IconButton } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 //Styles
 import styles from './LeftNavBar.module.scss'
 
-// Types
-import { Types } from '../../../context';
+// Types context
+import { Types } from '@context/types';
 
 // Context
 import { AppContext } from '../../../context/WindowPageContext';

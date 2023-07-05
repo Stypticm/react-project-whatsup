@@ -1,13 +1,15 @@
 import React from 'react'
 
-//Material UI
+// Material UI
 import { Box, Card, CardContent, Typography } from '@mui/material';
 
-//Styles
+// Styles
 import styles from './MainContent.module.scss'
 
-//Context
-import { AppContext } from '../../../context/WindowPageContext';
+// Context
+import { AppContext } from '@context/WindowPageContext';
+
+// Interfaces
 import { MessageProps } from '@helpers/interfaces';
 
 export const MainContent = () => {

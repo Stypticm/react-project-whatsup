@@ -1,7 +1,9 @@
+// Components
 import { RightNavBar } from "./RightNavBar";
 import { MainContent } from "./MainContent";
 import { InputMessage } from "./InputMessage";
 
+// Styles
 import styles from './RightColumn.module.scss';
 
 export const RightColumn = () => {

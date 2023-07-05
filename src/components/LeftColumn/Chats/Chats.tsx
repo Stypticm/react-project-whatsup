@@ -2,16 +2,16 @@ import React from 'react'
 
 //Material UI
 import { Box, Card, CardContent, Divider, Typography } from '@mui/material';
-import { AccountCircle, CatchingPokemonSharp } from '@mui/icons-material';
+import { AccountCircle } from '@mui/icons-material';
 
 //Styles
 import styles from './Chats.module.scss';
 
 // Context
-import { AppContext } from '../../../context/WindowPageContext';
+import { AppContext } from '@context/WindowPageContext';
 
-// Types
-import { Types } from '../../../context/types';
+// Types context
+import { Types } from '@context/types';
 
 // Components
 import { Search } from '../Search';

@@ -4,13 +4,13 @@ import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } f
 import { getFirestore, setDoc, doc, updateDoc, getDoc, getDocs, collection, query, where, arrayUnion } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCXnnSQn19614q0gZGdgpZzSpcgvUklAwQ",
-    authDomain: "messenger-31bfe.firebaseapp.com",
-    projectId: "messenger-31bfe",
-    storageBucket: "messenger-31bfe.appspot.com",
-    messagingSenderId: "768381579238",
-    appId: "1:768381579238:web:1902bac8681bec7a4a3027"
-};
+    apiKey: import.meta.env.VITE_API_KEY,
+    authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_MESSAGIN_SENDER_ID,
+    appId: import.meta.env.VITE_APP_ID
+}
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);

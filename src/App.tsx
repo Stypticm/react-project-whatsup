@@ -14,6 +14,7 @@ import styles from './App.module.scss'
 import { DialogCreateChat } from '@components/LeftColumn/DialogCreateChat/DialogCreateChat';
 import { DialogQuit } from '@components/LeftColumn/DialogQuit/DialogQuit';
 import { RegisteredPage } from '@components/RegisteredPage';
+import { DialogDeleteAllMessages } from '@components/LeftColumn/DialogDeleteAllMessages';
 
 const App = () => {
   const { state } = React.useContext(AppContext);
@@ -45,6 +46,12 @@ const App = () => {
                     open={state.isDialogQuit}
                   >
                     <DialogQuit />
+                  </Backdrop>
+                  <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={state.isDialogDeleteAllMessages}
+                  >
+                    <DialogDeleteAllMessages />
                   </Backdrop>
                 </ div>
             }

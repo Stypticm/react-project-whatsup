@@ -10,6 +10,7 @@ export type StateType = {
     isRegistered: boolean;
     isLoginIn: boolean;
     current_email: string;
+    isDialogDeleteAllMessages: boolean;
     contacts: [];
     messages: [];
 }
@@ -27,6 +28,7 @@ export const initialState: StateType = {
     isRegistered: true,
     isLoginIn: false,
     current_email: '',
+    isDialogDeleteAllMessages: false,
     contacts: [],
     messages: [],
 }
@@ -47,4 +49,5 @@ export enum Types {
     LOGIN_IN = 'LOGIN_IN',
     SET_USER = 'SET_USER',
     SET_MESSAGES = 'SET_MESSAGES',
+    DELETE_ALL = 'DELETE_ALL',
 }

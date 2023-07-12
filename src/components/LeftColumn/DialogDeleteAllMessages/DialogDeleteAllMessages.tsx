@@ -6,9 +6,13 @@ import { Button, Card, CardActions, CardContent, Typography } from '@mui/materia
 // Styles
 import styles from './DialogDeleteAllMessages.module.scss';
 
+// Types context
+import { Types } from '@context/types';
+
 // Context
-import { Types } from '../../../context/types';
-import { AppContext } from '../../../context/WindowPageContext';
+import { AppContext } from '@context/WindowPageContext';
+
+// Firebase
 import { deleteAllMessages } from '../../../firebase/firebase';
 
 

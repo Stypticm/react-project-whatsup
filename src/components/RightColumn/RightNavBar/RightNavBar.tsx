@@ -9,14 +9,18 @@ import { AccountCircle } from '@mui/icons-material';
 
 //Styles
 import styles from './RightNavBar.module.scss'
-import { AppContext } from '../../../context/WindowPageContext';
-import { Types } from '../../../context/types';
+
+//Context
+import { AppContext } from '@context/WindowPageContext';
+
+//Types context
+import { Types } from '@context/types';
 
 export const RightNavBar = () => {
 
   const { state, dispatch } = React.useContext(AppContext);
 
-  // Search button
+  //Search button
   const [searchBtn, setSearchBtn] = React.useState(false);
   const [searchText, setSearchText] = React.useState('');
 

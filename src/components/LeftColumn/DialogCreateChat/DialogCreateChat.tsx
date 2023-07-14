@@ -17,6 +17,7 @@ import { ContactProps, User, DialogCreateFormProps } from '@helpers/interfaces';
 
 // Firebase
 import { addContact, getAllUsers, getContacts } from '../../../firebase/firebase';
+import { DocumentData } from 'firebase/firestore';
 
 // Generate ID
 import { generateId } from '@helpers/generateId';
@@ -45,11 +46,11 @@ export const DialogCreateChat = () => {
         }
 
 
-        await getAllUsers().then((res: any) => {
-            const user = res.find((item: User) => {
+        await getAllUsers().then((res: DocumentData[] | undefined) => {
+            
+            const user = res?.find((item: DocumentData) => {
                 return item.phone === contact.contactPhone
-            })
-
+            }) as User | undefined;
 
             if (user !== undefined) {
                 if (user.email === state.current_email) {

@@ -20,6 +20,7 @@ import { getContacts, logInWithEmailAndPassword } from '../../firebase/firebase'
 
 // Helpers
 import { ContactProps, User, IFormProps } from '@helpers/interfaces';
+import { DocumentData } from 'firebase/firestore';
 
 export const WelcomePage = () => {
     const { dispatch } = React.useContext(AppContext);
@@ -43,9 +44,7 @@ export const WelcomePage = () => {
     const onSubmit: SubmitHandler<IFormProps> = async ({ password, email }) => {
         const user = await logInWithEmailAndPassword(email, password) as User;
 
-        const contacts = await getContacts(email).then((res: any) => {
-            return res.contacts;
-        }) as ContactProps[];
+        const contacts = await getContacts(email) as ContactProps[];
 
         if (user.email) {
             dispatch({

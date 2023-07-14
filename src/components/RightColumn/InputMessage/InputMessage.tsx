@@ -20,6 +20,9 @@ import { Types } from '@context/types';
 // Firebase
 import { addMessage } from '../../../firebase/firebase';
 
+// UUID
+import { generateId } from '@helpers/generateId';
+
 
 export const InputMessage = () => {
   const { state, dispatch } = React.useContext(AppContext)
@@ -35,7 +38,7 @@ export const InputMessage = () => {
       contactName: state.current_email,
       timestamp: date,
       textMessage: inputText,
-      uid: uuid()
+      uid: generateId()
     }
 
     const contact: ContactProps = state.contacts[state.chatIndex as number];

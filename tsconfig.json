@@ -14,12 +14,14 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "allowSyntheticDefaultImports": true,
 
     "baseUrl": "./src",
     "paths": {
       "@components/*": ["./components/*"],
+      "@context/*": ["./context/*"],
+      "@firebase/*": ["./firebase/*"],
       "@helpers/*": ["./helpers/*"],
-      "@context/*": ["./context/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

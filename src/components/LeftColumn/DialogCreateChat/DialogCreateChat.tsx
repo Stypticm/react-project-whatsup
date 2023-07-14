@@ -7,32 +7,27 @@ import { Button, Card, CardActions, CardContent, TextField, Typography } from '@
 import styles from './DialogCreateChat.module.scss';
 
 // Context
-import { AppContext } from '../../../context/WindowPageContext';
+import { AppContext } from '@context/WindowPageContext';
 
-// Types
-import { Types } from '../../../context/types';
+// Types context
+import { Types } from '@context/types';
 
 // Interfaces
-import { ContactProps, User } from '@helpers/interfaces';
+import { ContactProps, User, DialogCreateFormProps } from '@helpers/interfaces';
 
 // Firebase
 import { addContact, getAllUsers, getContacts } from '../../../firebase/firebase';
+import { DocumentData } from 'firebase/firestore';
 
-// UUID
-import { v4 as uuid } from 'uuid';
+// Generate ID
+import { generateId } from '@helpers/generateId';
 
-
-interface formProps {
-    phoneNumber: string;
-    contactName: string;
-}
 
 export const DialogCreateChat = () => {
     const { state, dispatch } = React.useContext(AppContext);
 
-    const [formInput, setFormInput] = React.useState<formProps>({
-        phoneNumber: '',
-        contactName: ''
+    const [formInput, setFormInput] = React.useState<DialogCreateFormProps>({
+        phoneNumber: ''
     });
 
     const handleInput: React.ChangeEventHandler<HTMLInputElement> = (e): void => {
@@ -43,19 +38,19 @@ export const DialogCreateChat = () => {
         event.preventDefault();
 
         const contact: ContactProps = {
-            contactName: formInput.contactName,
+            contactName: '',
             contactPhone: formInput.phoneNumber,
             contactEmail: '',
-            uid: uuid(),
+            uid: generateId(),
             messages: []
         }
 
 
-        await getAllUsers().then((res: any) => {
-            const user = res.find((item: User) => {
+        await getAllUsers().then((res: DocumentData[] | undefined) => {
+            
+            const user = res?.find((item: DocumentData) => {
                 return item.phone === contact.contactPhone
-            })
-
+            }) as User | undefined;
 
             if (user !== undefined) {
                 if (user.email === state.current_email) {
@@ -80,13 +75,13 @@ export const DialogCreateChat = () => {
             }
         })
 
-        setFormInput({ phoneNumber: '', contactName: '' });
+        setFormInput({ phoneNumber: '' });
         dispatch({ type: Types.DIALOG_CREATE_CHAT })
         getContacts(state.current_email)
     }
 
     const cancelButton = (): void => {
-        setFormInput({ phoneNumber: '', contactName: '' });
+        setFormInput({ phoneNumber: '' });
         dispatch({ type: Types.DIALOG_CREATE_CHAT })
     }
 
@@ -106,15 +101,6 @@ export const DialogCreateChat = () => {
                             onChange={handleInput}
                             fullWidth
                         />
-                        {/* <TextField
-                            name="contactName"
-                            helperText="Please enter name of contact"
-                            label="Contact Name"
-                            value={formInput.contactName}
-                            onChange={handleInput}
-                            disabled
-                            fullWidth
-                        /> */}
                         <CardActions className={styles.buttons}>
                             <Button size="small" type='submit'>Create</Button>
                             <Button size="small" type='button' onClick={cancelButton}>Cancel</Button>

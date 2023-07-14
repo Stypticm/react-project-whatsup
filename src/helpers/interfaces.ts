@@ -20,3 +20,16 @@ export interface User {
     phone: string;
     contacts: ContactProps[];
 }
+
+export interface DialogCreateFormProps {
+    phoneNumber: string;
+}
+
+export interface SignUpFormValues extends User {
+    password: string;
+}
+
+export interface IFormProps {
+    email: string;
+    password: string;
+}

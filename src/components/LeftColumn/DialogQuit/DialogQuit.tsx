@@ -6,8 +6,10 @@ import { Button, Card, CardActions, CardContent, Typography } from '@mui/materia
 // Styles
 import styles from './DialogQuit.module.scss';
 
-// Context
+// Types context
 import { Types } from '../../../context/types';
+
+// Context
 import { AppContext } from '../../../context/WindowPageContext';
 
 
